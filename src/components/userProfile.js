@@ -13,7 +13,7 @@ import {
 } from "../styled";
 
 function UserProfile() {
-  const [userName, setUserName] = useState({ savedValue: "", InputValue: "" });
+  const [userName, setUserName] = useState({ savedValue: "Anon", InputValue: "Anon" });
   // htmlFormat todays date to be same as date picker
   // no sense re-inventing the wheel, datejs is super light weight
   let todaysDate = dayjs().format("YYYY-MM-DD");
