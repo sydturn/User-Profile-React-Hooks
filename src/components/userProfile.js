@@ -8,6 +8,8 @@ import {
   Button,
   CancelButton,
   BirthdayDiv,
+  Container,
+  WelcomeText,
 } from "../styled";
 
 function UserProfile() {
@@ -16,11 +18,12 @@ function UserProfile() {
   // no sense re-inventing the wheel, datejs is super light weight
   let todaysDate = dayjs().format("YYYY-MM-DD");
   // set default birthday to yesterday so that happy birthday isn't displayed on first entry
-  let yeterdaysDate = dayjs().subtract(1, 'day').format("YYYY-MM-DD");
+  let yeterdaysDate = dayjs().subtract(1, "day").format("YYYY-MM-DD");
   const [birthday, setUserBirthday] = useState({
     savedValue: yeterdaysDate,
     InputValue: yeterdaysDate,
   });
+
   const [favoriteColour, setFavoriteColour] = useState({
     savedValue: "#5d1070",
     InputValue: "#5d1070",
@@ -55,17 +58,51 @@ function UserProfile() {
       setEditProfile(false); // close edit
     }
   };
-  return (
-    <>
-      {/* if today is the user birthday, wish them a happy birthday */}
-      {birthday.savedValue === todaysDate && !editProfile && (
-        <BirthdayDiv color={favoriteColour.savedValue}>
-          HAPPY BIRTHDAY {userName.savedValue}!
-        </BirthdayDiv>
+  const getDaysUntil = () => {
+    // make birthday into dayjs object
+    let dayjsbday = dayjs(birthday.savedValue);
+    let todayObj = dayjs();
+    // set birthday to this year
+    dayjsbday = dayjsbday.year(todayObj.get("year"));
+    // check if today is birthday and return 0 days if so
+    if (todaysDate === dayjsbday.format("YYYY-MM-DD")) {
+      return 0;
+    }
+    // if birthday has passed change year to next year
+    if (todayObj.isAfter(dayjsbday)) {
+      dayjsbday = dayjsbday.add(1, "year");
+    }
+    const difference = dayjsbday.diff(todaysDate, "day");
+    return difference;
+  };
+  // logic for deciding what we display at the top of the page
+  const daysUntilBirthday = getDaysUntil();
+  const welcomeMessage = (
+    <WelcomeText color={favoriteColour.savedValue}>
+      Welcome {userName.savedValue},
+      {daysUntilBirthday > 1 && (
+        <> There are {daysUntilBirthday} days until your birthday</>
       )}
+      {daysUntilBirthday === 1 && (
+        <> There is only {daysUntilBirthday} more day until your birthday!</>
+      )}
+    </WelcomeText>
+  );
+  const happyBirthdayMessage = (
+    <BirthdayDiv color={favoriteColour.savedValue}>
+      HAPPY BIRTHDAY {userName.savedValue.toUpperCase()}!
+    </BirthdayDiv>
+  );
+  const topBanner =
+    daysUntilBirthday === 0 ? happyBirthdayMessage : welcomeMessage;
+
+  return (
+    <Container>
+      {/* if today is the user birthday, wish them a happy birthday */}
+      {topBanner}
       {/* begin username */}
       <Label htmlFor="uname" disabled={!editProfile}>
-        Username
+        Name
       </Label>
       <UsernameInput
         name="uname"
@@ -81,7 +118,6 @@ function UserProfile() {
         }}
       />
       <br />
-
       {/* begin birthday */}
       <Label htmlFor="bday" disabled={!editProfile}>
         Birthday
@@ -102,7 +138,6 @@ function UserProfile() {
         }}
       />
       <br />
-
       {/* begin colour */}
       <Label htmlFor="color">Favorite Colour</Label>
       <ColourInput
@@ -118,6 +153,7 @@ function UserProfile() {
           });
         }}
       />
+      <br />
       <Button
         color={favoriteColour.savedValue}
         onClick={() => handleSaveEdit(editProfile)}
@@ -129,7 +165,7 @@ function UserProfile() {
           Cancel
         </CancelButton>
       )}
-    </>
+    </Container>
   );
 }
 export default UserProfile;

@@ -8,7 +8,7 @@ const getTextColour = (bgColor) => {
     : "#fff";
 };
 // default favorite colour
-const dfcolour = "5d1070"
+const dfcolour = "5d1070";
 export const BodyStyle = styled.div`
 height: 100vh;
 position: relative;
@@ -18,10 +18,12 @@ overflow-y: auto;
 margin: 0;
 padding: 0;
 }`;
-
+export const Container = styled.div`
+  width: 50%;
+  margin: auto;
+`;
 export const Input = styled.input`
   font-size: 18px;
-  width: 50%;
   padding: 2px 5px;
   margin: 8px 0;
   display: inline-block;
@@ -37,26 +39,29 @@ export const Input = styled.input`
 // shown on users birthday
 export const BirthdayDiv = styled.h3`
   background-color: ${(props) => props.color || dfcolour};
-  color: ${(props) => getTextColour(props.color || dfcolour)}
+  color: ${(props) => getTextColour(props.color || dfcolour)};
+  text-align: center;
 `;
-BirthdayDiv.displayName = "BirthdayDiv"
-
+BirthdayDiv.displayName = "BirthdayDiv";
+export const WelcomeText = styled.h3`
+  color: ${(props) => props.color || dfcolour};
+`;
 // input box for users name
 export const UsernameInput = styled(Input)``;
-UsernameInput.displayName="UsernameInput"
+UsernameInput.displayName = "UsernameInput";
 
 // input box for users favorite colour, changes button colours
 export const ColourInput = styled(Input)``;
-ColourInput.displayName="ColourInput"
+ColourInput.displayName = "ColourInput";
 
 // input box for users birthday
 export const BirthdayInput = styled(Input)``;
-BirthdayInput.displayName="BirthdayInput";
+BirthdayInput.displayName = "BirthdayInput";
 
 export const Label = styled.label`
   padding-right: 10px;
 `;
-Label.displayName="Label";
+Label.displayName = "Label";
 
 export const Button = styled.button.attrs(() => ({
   type: "button",
@@ -81,6 +86,6 @@ export const Button = styled.button.attrs(() => ({
     outline: none;
   }
 `;
-Button.displayName = 'Button'
+Button.displayName = "Button";
 export const CancelButton = styled(Button)``;
-CancelButton.displayName = 'CancelButton'
+CancelButton.displayName = "CancelButton";
