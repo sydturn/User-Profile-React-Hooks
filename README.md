@@ -5,4 +5,4 @@
 2. Ensure you have Node and NPM installed
 3. Open the project and type command ```yarn``` to install dependencies
 4. Type ```yarn start``` to run the project on port 3000
-5. Type ```yarn test``` to run the project's unit test
+5. Type ```yarn test``` to run the project's unit tests
