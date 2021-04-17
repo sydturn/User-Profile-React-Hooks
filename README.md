@@ -1,4 +1,4 @@
-## A really basic React Native app using functional components and react hooks
+## A basic React Native app using functional components, styled components, and react hooks
 
 ### To Run
 1. Clone the repository
