@@ -10,10 +10,16 @@ import {
   BirthdayDiv,
   Container,
   WelcomeText,
+  HR,
+  IDCard
 } from "../styled";
+import Balloons from "./balloons";
 
 function UserProfile() {
-  const [userName, setUserName] = useState({ savedValue: "Anon", InputValue: "Anon" });
+  const [userName, setUserName] = useState({
+    savedValue: "Anon",
+    InputValue: "Anon",
+  });
   // htmlFormat todays date to be same as date picker
   // no sense re-inventing the wheel, datejs is super light weight
   let todaysDate = dayjs().format("YYYY-MM-DD");
@@ -88,84 +94,92 @@ function UserProfile() {
       )}
     </WelcomeText>
   );
-  const happyBirthdayMessage = (
-    <BirthdayDiv color={favoriteColour.savedValue}>
-      HAPPY BIRTHDAY {userName.savedValue.toUpperCase()}!
-    </BirthdayDiv>
-  );
-  const topBanner =
-    daysUntilBirthday === 0 ? happyBirthdayMessage : welcomeMessage;
-
   return (
-    <Container>
+    <>
       {/* if today is the user birthday, wish them a happy birthday */}
-      {topBanner}
-      {/* begin username */}
-      <Label htmlFor="uname" disabled={!editProfile}>
-        Name
-      </Label>
-      <UsernameInput
-        name="uname"
-        disabled={!editProfile}
-        type="string"
-        value={userName.InputValue}
-        onChange={(event) => {
-          event.preventDefault();
-          setUserName({
-            savedValue: userName.savedValue,
-            InputValue: event.target.value,
-          });
-        }}
-      />
-      <br />
-      {/* begin birthday */}
-      <Label htmlFor="bday" disabled={!editProfile}>
-        Birthday
-      </Label>
-      <BirthdayInput
-        name="bday"
-        type="date"
-        disabled={!editProfile}
-        value={birthday.InputValue}
-        max={todaysDate} // should probably be minus at least a year, but that's hard for testing
-        onChange={(event) => {
-          // need to prevent default input functionality otherwise it over writes our values
-          event.preventDefault();
-          setUserBirthday({
-            savedValue: birthday.savedValue,
-            InputValue: event.target.value,
-          });
-        }}
-      />
-      <br />
-      {/* begin colour */}
-      <Label htmlFor="color">Favorite Colour</Label>
-      <ColourInput
-        name="color"
-        disabled={!editProfile}
-        type="color"
-        value={favoriteColour.InputValue}
-        onChange={(event) => {
-          event.preventDefault();
-          setFavoriteColour({
-            savedValue: favoriteColour.savedValue,
-            InputValue: event.target.value,
-          });
-        }}
-      />
-      <br />
-      <Button
-        color={favoriteColour.savedValue}
-        onClick={() => handleSaveEdit(editProfile)}
-      >
-        {buttonText}
-      </Button>
-      {editProfile && (
-        <CancelButton color={favoriteColour.savedValue} onClick={cancelEdit}>
-          Cancel
-        </CancelButton>
+      {daysUntilBirthday === 0 && (
+        <BirthdayDiv color={favoriteColour.savedValue}>
+          <Balloons
+            message={`HAPPY BIRTHDAY ${userName.savedValue.toUpperCase()}!`}
+          />
+        </BirthdayDiv>
       )}
-    </Container>
+      <Container>
+        {/* begin username */}
+        {daysUntilBirthday > 0 && (
+          <>
+            {welcomeMessage}
+            <HR />
+          </>
+        )}
+        <IDCard color={favoriteColour.savedValue}>
+          <Label htmlFor="uname" disabled={!editProfile}>
+            Name
+          </Label>
+          <UsernameInput
+            name="uname"
+            disabled={!editProfile}
+            type="string"
+            value={userName.InputValue}
+            onChange={(event) => {
+              event.preventDefault();
+              setUserName({
+                savedValue: userName.savedValue,
+                InputValue: event.target.value,
+              });
+            }}
+          />
+          <br />
+          {/* begin birthday */}
+          <Label htmlFor="bday" disabled={!editProfile}>
+            Birthday
+          </Label>
+          <BirthdayInput
+            name="bday"
+            type="date"
+            disabled={!editProfile}
+            value={birthday.InputValue}
+            max={todaysDate} // should probably be minus at least a year, but that's hard for testing
+            onChange={(event) => {
+              // need to prevent default input functionality otherwise it over writes our values
+              event.preventDefault();
+              setUserBirthday({
+                savedValue: birthday.savedValue,
+                InputValue: event.target.value,
+              });
+            }}
+          />
+          <br />
+          {/* begin colour */}
+          <Label htmlFor="color">Favorite Colour</Label>
+          <ColourInput
+            name="color"
+            disabled={!editProfile}
+            type="color"
+            value={favoriteColour.InputValue}
+            onChange={(event) => {
+              event.preventDefault();
+              setFavoriteColour({
+                savedValue: favoriteColour.savedValue,
+                InputValue: event.target.value,
+              });
+            }}
+          />
+        </IDCard>
+        <br />
+        <Button
+          color={favoriteColour.savedValue}
+          onClick={() => handleSaveEdit(editProfile)}
+        >
+          {buttonText}
+        </Button>
+        {editProfile && (
+          <CancelButton color={favoriteColour.savedValue} onClick={cancelEdit}>
+            Cancel
+          </CancelButton>
+        )}
+      </Container>
+    </>
   );
 }
 export default UserProfile;
